@@ -5,6 +5,8 @@ import (
 	"log"
 
 	"github.com/SaidovZohid/medium-clone-simple/config"
+	"github.com/SaidovZohid/medium-clone-simple/server"
+	"github.com/SaidovZohid/medium-clone-simple/storage"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -27,5 +29,14 @@ func main() {
 
 	log.Println("Postgres Connection successfully done!")
 
-	_ = psqlConn
+	strg := storage.NewStorage(psqlConn)
+
+	router := server.NewServer(&server.Options{
+		Strg: strg,
+	})
+
+	if err = router.Run(cfg.Port); err != nil {
+		log.Fatalf("Failed to run to server: %v", err)
+	}
+	fmt.Println("Hello World!")
 }

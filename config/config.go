@@ -6,6 +6,7 @@ import (
 )
 
 type Config struct {
+	Port     string
 	Postgres Postgres
 }
 
@@ -25,6 +26,7 @@ func Load(path string) Config {
 	conf.AutomaticEnv()
 
 	cfg := Config{
+		Port: conf.GetString("PORT"),
 		Postgres: Postgres{
 			Host:     conf.GetString("POSTGRES_HOST"),
 			Port:     conf.GetString("POSTGRES_PORT"),
